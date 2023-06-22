@@ -9,8 +9,6 @@ const initialState = {
   setUserId: () => {},
   setUser: () => {},
   item: [],
-  // login: () => {},
-  // signup: () => {},
   logout: () => {},
   addTransaction: () => {},
   deleteTransaction: () => {},
@@ -33,7 +31,6 @@ const reducer = (state, action) => {
     case "GET_TRANSACTION":
       return {
         ...state,
-        // loading: false,
         item: action.payload,
       };
     default:
@@ -98,22 +95,58 @@ export function GlobalProvider({ children }) {
   };
   //Actions....
   // #Add Transaction Method....
-  const addTransaction = (item) => {
-    dispatch({
-      type: "ADD_TRANSACTION",
-      payload: item,
+  const addTransaction = async ({ text, amount }) => {
+    console.log(authToken);
+    const response = await fetch("http://localhost:5000/api/expense", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${String(authToken)}`,
+      },
+      body: JSON.stringify({ text: text, amount: amount }),
     });
+    console.log(response.data);
+    if (response.status === 200) {
+      dispatch({
+        type: "ADD_TRANSACTION",
+        payload: response.data.data,
+      });
+    }
   };
   // #Delete Transaction Method.....
-  const deleteTransaction = (id) => {
-    dispatch({
-      type: "DELETE_TRANSACTION",
-      payload: id,
-    });
+  const deleteTransaction = async (id) => {
+    const response = await fetch(
+      "http://localhost:5000/api/expense" + `/${userId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${String(authToken)}`,
+        },
+      }
+    );
+    if (response.status === 200) {
+      dispatch({
+        type: "DELETE_TRANSACTION",
+        payload: id,
+      });
+    }
   };
 
   const getTransaction = async () => {
-    const res = fetch("");
+    const response = await fetch("http://localhost:5000/api/expense/", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${String(authToken)}`,
+      },
+    });
+    if (response.status === 200) {
+      const data = await response.json();
+      dispatch({
+        type: "GET_TRANSACTION",
+        payload: data.data,
+      });
+    }
   };
 
   //  #Globally Available Values....
@@ -132,6 +165,7 @@ export function GlobalProvider({ children }) {
     logout,
     addTransaction,
     deleteTransaction,
+    getTransaction,
   };
   // useEffect(() => {
   //   update();

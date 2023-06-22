@@ -9,7 +9,7 @@ const getTransaction = asyncHandler(async (req, res) => {
 const deleteTransaction = asyncHandler(async (req, res) => {
   const expense = await Expense.find({ user: req.user.id });
   if (!expense) {
-    res.status(400);
+    res.status(404);
     throw new Error("Invalid");
   }
   const user = await User.findById(req.user.id);
@@ -31,7 +31,7 @@ const addTransaction = asyncHandler(async (req, res) => {
     text: text,
     amount: Number(amount),
   });
-  res.status(200).json(expense);
+  res.status(201).json(expense);
 });
 
 module.exports = {
