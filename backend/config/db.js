@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const connectDB = async () => {
   try {
     await mongoose.connect(
-      "mongodb+srv://aman:aman@cluster0.fuorplv.mongodb.net/",
+      "mongodb+srv://aman:aman@cluster0.fuorplv.mongodb.net/Expense_Tracker",
       {}
     );
     console.log("Database Connected...");

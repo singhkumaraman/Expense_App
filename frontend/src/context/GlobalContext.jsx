@@ -42,70 +42,64 @@ export const GlobalContext = createContext(initialState);
 
 export function GlobalProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [authToken, setAuthToken] = useState(() => {
-    localStorage.getItem("authToken")
-      ? JSON.parse(localStorage.getItem("authToken"))
-      : null;
-  });
-  const [userId, setUserId] = useState(
-    localStorage.getItem("authToken")
-      ? jwt_decode(localStorage.getItem("authToken"))._id
-      : null
-  );
-  const [user, setUser] = useState(
-    localStorage.getItem("user")
-      ? JSON.parse(localStorage.getItem("user"))
-      : null
-  );
+  const [authToken, setAuthToken] = useState(null);
+  const [userId, setUserId] = useState(null);
+  const [user, setUser] = useState(null);
   //Register User....
-  const signup = async (name, email, password) => {
+  const signup = async (name, password, email) => {
     if (name == "" || password === "" || email === "") {
       alert("Please Enter all the fields");
       return;
     }
-    const response = await fetch("http://localhost:5000/api/user/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: name,
-        email: email,
-        password: password,
-      }),
-    });
-    if (response.status === 200) {
-      alert("User Created Successfully");
-    } else {
-      alert("User Already Exists");
+    try {
+      const response = await fetch("http://localhost:5000/api/user/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          password: password,
+        }),
+      });
+
+      const data = await response.json();
+      if (!data || data.error || response.status == 400) {
+        alert("There was some error");
+      } else {
+        alert("User Created Successfully");
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
   const logout = () => {
     localStorage.removeItem("authToken");
     localStorage.removeItem("user");
+    localStorage.removeItem("user_id");
     setAuthToken(null);
     setUserId(null);
     setUser(null);
   };
   const update = () => {
-    if (authToken === null) logout();
-    // setUserId(jwt_decode(localStorage.getItem("authToken"))._id);
+    // if (authToken === null) logout();
     setAuthToken(JSON.parse(localStorage.getItem("authToken")));
+    setUserId(JSON.parse(localStorage.getItem("user_id")));
     setUser(JSON.parse(localStorage.getItem("user")));
   };
   //Actions....
   // #Add Transaction Method....
-  const addTransaction = async ({ text, amount }) => {
-    console.log(authToken);
+  const addTransaction = async (text, amount, id) => {
     const response = await fetch("http://localhost:5000/api/expense", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${String(authToken)}`,
+        Authorization: `Bearer ${authToken}`,
       },
-      body: JSON.stringify({ text: text, amount: amount }),
+      body: JSON.stringify({ id: id, text: text, amount: amount }),
     });
-    console.log(response.data);
+
     if (response.status === 200) {
       dispatch({
         type: "ADD_TRANSACTION",
@@ -116,12 +110,12 @@ export function GlobalProvider({ children }) {
   // #Delete Transaction Method.....
   const deleteTransaction = async (id) => {
     const response = await fetch(
-      "http://localhost:5000/api/expense" + `/${userId}`,
+      "http://localhost:5000/api/expense" + `/${id}`,
       {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${String(authToken)}`,
+          Authorization: `Bearer ${authToken}`,
         },
       }
     );
@@ -130,6 +124,7 @@ export function GlobalProvider({ children }) {
         type: "DELETE_TRANSACTION",
         payload: id,
       });
+      // alert("Deleted");
     }
   };
 
@@ -137,14 +132,14 @@ export function GlobalProvider({ children }) {
     const response = await fetch("http://localhost:5000/api/expense/", {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${String(authToken)}`,
+        Authorization: `Bearer ${authToken}`,
       },
     });
     if (response.status === 200) {
       const data = await response.json();
       dispatch({
         type: "GET_TRANSACTION",
-        payload: data.data,
+        payload: data,
       });
     }
   };
@@ -158,18 +153,16 @@ export function GlobalProvider({ children }) {
     setAuthToken: setAuthToken,
     setUserId: setUserId,
     setUser: setUser,
-    // signup: signup,
     logout: logout,
-    // login,
     signup,
     logout,
     addTransaction,
     deleteTransaction,
     getTransaction,
   };
-  // useEffect(() => {
-  //   update();
-  // }, []);
+  useEffect(() => {
+    update();
+  }, []);
   return (
     <GlobalContext.Provider value={contextValue}>
       {children}

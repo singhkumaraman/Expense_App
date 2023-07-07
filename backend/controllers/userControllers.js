@@ -9,7 +9,7 @@ const register = asynchandler(async (req, res) => {
     res.status(400);
     throw new Error("Invalid request");
   }
-  const userExists = await User.findOne({ email });
+  const userExists = await User.findOne({ email: email });
   if (userExists) {
     res.status(401);
     throw new Error("User Already exists");
@@ -18,11 +18,12 @@ const register = asynchandler(async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
   const user = await User.create({
-    name,
-    email,
+    name: name,
+    email: req.body.email,
     password: hashedPassword,
   });
-  if (!user) {
+  const done = await user.save();
+  if (!done) {
     res.status(400);
     throw new Error("Invalid request");
   }
@@ -35,8 +36,9 @@ const register = asynchandler(async (req, res) => {
 //LOGIN
 const loginUser = asynchandler(async (req, res) => {
   const { email, password } = req.body;
-  console.log(req.body);
+  console.log(email);
   const user = await User.findOne({ email });
+  console.log(user);
   if (user && (await bcrypt.compare(password, user.password))) {
     res.status(200).json({
       user,
@@ -54,7 +56,7 @@ const getMe = asynchandler(async (req, res) => {
 });
 //GENERATE TOKEN
 const generateToken = (id) => {
-  return jwt.sign({ id }, "aman123", {
+  return jwt.sign({ id }, "aman", {
     expiresIn: "30d",
   });
 };

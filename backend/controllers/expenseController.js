@@ -1,37 +1,34 @@
 const asyncHandler = require("express-async-handler");
 const Expense = require("../models/expense");
 const User = require("../models/user");
-
+const jwt = require("jsonwebtoken");
 const getTransaction = asyncHandler(async (req, res) => {
-  const expense = await Expense.find({ user: req.user.id });
+  const data = req.headers.authorization;
+  //decoding the token and find out all the inputs attached to the this user and returning it.
+  token = data.split(" ")[1];
+  const decoded = jwt.verify(token, "aman", { algorithms: ["HS256"] });
+  const expense = await Expense.find({ user: decoded.id });
   res.status(200).json(expense);
 });
 const deleteTransaction = asyncHandler(async (req, res) => {
-  const expense = await Expense.find({ user: req.user.id });
+  const expense = await Expense.find({ user: req.params.id });
   if (!expense) {
     res.status(404);
     throw new Error("Invalid");
   }
-  const user = await User.findById(req.user.id);
-  if (!user) {
-    res.status(401);
-    throw new Error("User not Found");
-  }
-  if (expense[0].user.toString() !== user._id.toString()) {
-    res.status(401);
-    throw new Error("User not Authorized");
-  }
-  await Expense.findOneAndDelete({ user: req.user });
-  res.status(200).json({ msg: "Deletion Successfull" });
+  await Expense.findOneAndDelete({ _id: req.params.id });
+  res.status(200).json("deleted");
 });
-
+//Middleware not working
+//will work on tha part later.
 const addTransaction = asyncHandler(async (req, res) => {
-  const { text, amount } = req.body;
+  const { text, amount, id } = req.body;
   const expense = await Expense.create({
+    user: id,
     text: text,
     amount: Number(amount),
   });
-  res.status(201).json(expense);
+  res.status(201).json("Transaction Added");
 });
 
 module.exports = {

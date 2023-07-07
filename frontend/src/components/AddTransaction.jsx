@@ -6,38 +6,35 @@ const AddTransaction = () => {
   const [text, setText] = useState("");
   const [amount, setAmount] = useState(0);
   const context = useContext(GlobalContext);
-
+  const id = context.user_id;
   function onSubmit(e) {
-    e.preventDefault();
-
-    const newTransaction = {
-      id: Math.floor(Math.random() * 100000000),
-      text,
-      amount: +amount,
-    };
+    // e.preventDefault();
     if (amount !== 0 && text !== "") {
-      context.addTransaction(newTransaction);
+      context.addTransaction(text, amount, id);
     }
   }
   return (
-    <>
-      <h3 className="font-semibold  mt-4 mb-2 border-b-2  border-gray-300 shadow-sm pb-1 text-center">
+    <div className="mx-auto max-w-sm">
+      <h3 className="font-semibold mt-4 mb-2 border-b-2 border-gray-300 shadow-sm pb-1 text-center">
         Add New Transaction
       </h3>
 
       <form>
-        <div>
-          <span className="ml-2 font-sans font-semibold">Text:</span>
-          <div className="p-1 border hover:border-2 border-black rounded-md m-2 ">
+        <div className="mb-4">
+          <label className="ml-2 font-sans font-semibold">Text:</label>
+          <div className="p-1 border hover:border-2 border-black rounded-md m-2">
             <input
               className="w-full outline-none"
               type="text"
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder="Enter text..."
-            ></input>
+            />
           </div>
-          <span className="ml-2 font-sans font-semibold">Amount:</span>
+        </div>
+
+        <div className="mb-4">
+          <label className="ml-2 font-sans font-semibold">Amount:</label>
           <div className="p-1 border hover:border-2 border-black rounded-md m-2">
             <input
               className="w-full outline-none"
@@ -48,6 +45,7 @@ const AddTransaction = () => {
             />
           </div>
         </div>
+
         <button
           className="ml-2 mt-2 py-1 px-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg"
           onClick={onSubmit}
@@ -55,7 +53,7 @@ const AddTransaction = () => {
           Add Transaction
         </button>
       </form>
-    </>
+    </div>
   );
 };
 

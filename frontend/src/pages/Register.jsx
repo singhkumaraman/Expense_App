@@ -7,6 +7,7 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  console.log(email);
   const context = useContext(GlobalContext);
   return (
     <div className=" border p-10 rounded-lg  shadow-md  border-gray-200 bg-white w-1/4 h-3/4 ">
@@ -41,7 +42,7 @@ const SignUp = () => {
           type="email"
           placeholder="Email"
           className="w-full outline-none"
-          name="Eamil"
+          name="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -51,6 +52,7 @@ const SignUp = () => {
         <button
           onClick={(e) => {
             e.preventDefault();
+            console;
             context.signup(username, password, email);
           }}
           className="py-1 px-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg"

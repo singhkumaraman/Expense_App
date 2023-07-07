@@ -28,11 +28,11 @@ const Login = () => {
       const data = await response.json();
       const token = data.token;
       localStorage.setItem("authToken", JSON.stringify(token));
+      localStorage.setItem("user_id", JSON.stringify(data.user._id));
       localStorage.setItem("user", JSON.stringify(data.user.name));
       context.setUserId(data.user._id);
       context.setAuthToken(token);
       context.setUser(data.user.name);
-      alert("Login Successfull");
       nav("/home");
     } else {
       alert("Invalid Credentials");
