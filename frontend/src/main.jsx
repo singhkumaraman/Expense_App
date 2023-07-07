@@ -7,7 +7,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <GlobalProvider>
-      <div className="flex flex-col justify-center items-center min-h-screen bg-primary">
+      <div className="bg-gray-900">
         <App />
       </div>
     </GlobalProvider>
