@@ -1,5 +1,4 @@
 import { createContext, useEffect, useReducer, useState } from "react";
-import jwt_decode from "jwt-decode";
 
 const initialState = {
   user: null,
@@ -124,7 +123,6 @@ export function GlobalProvider({ children }) {
         type: "DELETE_TRANSACTION",
         payload: id,
       });
-      // alert("Deleted");
     }
   };
 

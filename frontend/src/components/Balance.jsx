@@ -8,8 +8,10 @@ const Balance = () => {
   const total = amounts.reduce((start, end) => (start += end), 0).toFixed(2);
   return (
     <div className="text-center">
-      <h4 className="font-bold ml-3 mb-1 text-3xl sm:text-4xl">Your Balance</h4>
-      <h1 className="font-semibold ml-3 mb-4 text-xl sm:text-2xl">${total}</h1>
+      <h4 className="font-bold text-2xl sm:text-3xl text-gray-700">
+        Your Balance
+      </h4>
+      <h1 className="font-semibold text-4xl sm:text-5xl mt-2">${total}</h1>
     </div>
   );
 };

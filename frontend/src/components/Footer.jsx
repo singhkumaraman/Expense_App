@@ -1,5 +1,5 @@
 import React from "react";
-
+import { SiAnalogue } from "react-icons/si";
 const Footer = () => {
   return (
     <footer className="p-4 bg-white md:p-8 lg:p-10 dark:bg-gray-800">
@@ -8,19 +8,11 @@ const Footer = () => {
           href="#"
           className="flex justify-center items-center text-2xl font-semibold text-gray-900 dark:text-white"
         >
-          <svg
-            className="mr-2 h-8"
-            viewBox="0 0 33 33"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            {/* SVG paths */}
-          </svg>
+          <SiAnalogue className="m-2 text-white text-2xl" />
           Money Manager
         </a>
         <p className="my-6 text-gray-500 dark:text-gray-400">
-          Open-source library of over 400+ web components and interactive
-          elements built for better web.
+          Let us help you reach your financial goals. Expect excellence.
         </p>
         <ul className="flex flex-wrap justify-center items-center mb-6 text-gray-900 dark:text-white">
           <li>

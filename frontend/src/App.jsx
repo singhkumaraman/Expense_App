@@ -6,25 +6,41 @@ import SignUp from "./pages/Register.jsx";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import Contact from "./components/Contact.jsx";
+import { GlobalProvider } from "./context/GlobalContext.jsx";
+import Analytics from "./pages/Analytics.jsx";
+import Error from "./components/Error.jsx";
+
 const App = () => {
   return (
-    <BrowserRouter>
-      <Header />
-      <Routes>
-        <Route element={<Login />} index />
-        <Route element={<SignUp />} exact path="/signup" />
-        <Route element={<Contact />} exact path="/contact" />
-        <Route
-          path="/home"
-          element={
-            <PrivateRoute>
-              <Home />
-            </PrivateRoute>
-          }
-        />
-      </Routes>
-      <Footer />
-    </BrowserRouter>
+    <GlobalProvider>
+      <BrowserRouter>
+        {/* <Header /> */}
+        <Routes>
+          <Route element={<Login />} index />
+          <Route element={<SignUp />} exact path="/signup" />
+          <Route element={<Contact />} exact path="/contact" />
+          <Route
+            element={
+              <PrivateRoute>
+                <Analytics />
+              </PrivateRoute>
+            }
+            exact
+            path="/analytics"
+          />
+          <Route path="*" element={<Error />}></Route>
+          <Route
+            path="/home"
+            element={
+              <PrivateRoute>
+                <Home />
+              </PrivateRoute>
+            }
+          />
+        </Routes>
+        <Footer />
+      </BrowserRouter>
+    </GlobalProvider>
   );
 };
 

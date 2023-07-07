@@ -1,4 +1,4 @@
-import Header from "../components/Header";
+import HomeHeader from "../components/HomeHeader";
 import Balance from "../components/Balance";
 import ExpenseIncome from "../components/ExpenseIncome";
 import List from "../components/List";
@@ -11,14 +11,17 @@ const Home = () => {
     context.getTransaction();
   }, []);
   return (
-    <div className="flex justify-center items-center h-screen m-10 ">
-      <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4 border p-12 rounded-lg shadow-lg border-gray-200 bg-white">
-        <Balance />
-        <ExpenseIncome />
-        <List />
-        <AddTransaction />
+    <>
+      <HomeHeader />
+      <div className="min-h-screen p-8 bg-gray-900">
+        <div className="max-w-lg mx-auto border p-20 rounded-lg shadow-lg bg-white">
+          <Balance />
+          <ExpenseIncome />
+          <List />
+          <AddTransaction />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
