@@ -18,7 +18,15 @@ const App = () => {
           <Route element={<Login />} index />
           <Route element={<SignUp />} exact path="/signup" />
           <Route element={<Contact />} exact path="/contact" />
-          <Route element={<Analytics />} exact path="/analytics" />
+          <Route
+            element={
+              <PrivateRoute>
+                <Analytics />
+              </PrivateRoute>
+            }
+            exact
+            path="/analytics"
+          />
           <Route path="*" element={<Error />}></Route>
           <Route
             path="/home"
