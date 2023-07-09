@@ -14,20 +14,11 @@ const App = () => {
   return (
     <GlobalProvider>
       <BrowserRouter>
-        {/* <Header /> */}
         <Routes>
           <Route element={<Login />} index />
           <Route element={<SignUp />} exact path="/signup" />
           <Route element={<Contact />} exact path="/contact" />
-          <Route
-            element={
-              <PrivateRoute>
-                <Analytics />
-              </PrivateRoute>
-            }
-            exact
-            path="/analytics"
-          />
+          <Route element={<Analytics />} exact path="/analytics" />
           <Route path="*" element={<Error />}></Route>
           <Route
             path="/home"

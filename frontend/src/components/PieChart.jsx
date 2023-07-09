@@ -1,28 +1,25 @@
-import React, { forwardRef } from "react";
+import React, { useContext } from "react";
 import { Pie } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+ChartJS.register(ArcElement, Tooltip, Legend);
 
-const PieChart = forwardRef(({ income, expense }, ref) => {
+const PieChart = ({ income, expense }) => {
   const data = {
-    labels: ["Income", "Expense"],
+    labels: ["income", "expense"],
     datasets: [
       {
         data: [income, expense],
-        backgroundColor: ["#36a2eb", "#ff6384"],
+        backgroundColor: ["green", "crimson"],
       },
     ],
   };
+  const options = {};
 
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        display: true,
-        position: "bottom",
-      },
-    },
-  };
-
-  return <Pie ref={ref} data={data} options={options} />;
-});
+  return (
+    <div style={{ width: "70%", padding: "15px", margin: "auto" }}>
+      <Pie data={data} options={options} />
+    </div>
+  );
+};
 
 export default PieChart;

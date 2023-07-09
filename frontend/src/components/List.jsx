@@ -17,17 +17,17 @@ const List = () => {
               key={transaction._id}
               className="py-3 flex items-center justify-between"
             >
-              <div className="flex flex-col sm:flex-row items-center">
-                <div className="font-semibold text-lg mb-2 sm:mb-0 sm:mr-4">
+              <div className="flex items-center justify-center">
+                <div className="font-semibold text-lg mb-2 mr-4">
                   {transaction.text}
                 </div>
                 <div>
                   <span
-                    className={`font-semibold ${
+                    className={`font-semibold  ${
                       transaction.amount < 0 ? "text-red-600" : "text-green-600"
                     }`}
                   >
-                    ${Math.abs(transaction.amount)}
+                    ₹{Math.abs(transaction.amount)}
                   </span>
                 </div>
               </div>

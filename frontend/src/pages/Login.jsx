@@ -36,6 +36,10 @@ const Login = () => {
       alert("Invalid Credentials");
     }
   };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    login(email, password);
+  };
   return (
     <>
       <Header />
@@ -56,9 +60,7 @@ const Login = () => {
               <form
                 className="space-y-4 md:space-y-6"
                 action="#"
-                onSubmit={() => {
-                  login(email, password);
-                }}
+                onSubmit={handleSubmit}
               >
                 <div>
                   <label

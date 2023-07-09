@@ -4,6 +4,6 @@ import { GlobalContext } from "../context/GlobalContext";
 function PrivateRoute({ children }) {
   const context = useContext(GlobalContext);
   console.log(context.token);
-  return context.user !== null ? children : <Navigate to="/*" />;
+  return context.user !== null ? children : <Navigate to="/home" />;
 }
 export default PrivateRoute;

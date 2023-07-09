@@ -1,23 +1,30 @@
-import React, { useContext, useRef } from "react";
-import { GlobalContext } from "../context/GlobalContext";
-import PieChart from "../components/PieChart";
+import React from "react";
+import { Bar } from "react-chartjs-2";
+// import { ChartJS, CategoryScale, LinearScale, Tooltip, Legend } from "chart.js";
+import HomeHeader from "../components/HomeHeader";
+
+// ChartJS.register(CategoryScale, LinearScale, Tooltip, Legend);
 
 const Analytics = () => {
-  const chartRef = useRef();
-  const context = useContext(GlobalContext);
-  const amounts = context.item.map((transaction) => transaction.amount);
-  const income = amounts
-    .filter((amount) => amount > 0)
-    .reduce((total, amount) => total + amount, 0)
-    .toFixed(2);
-  const expense = amounts
-    .filter((amount) => amount < 0)
-    .reduce((total, amount) => total + amount, 0)
-    .toFixed(2);
+  const data = {
+    labels: ["mon", "tue"],
+    datasets: [
+      {
+        data: [5, 6],
+        backgroundColor: "green",
+        borderColor: "black",
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const options = {};
+
   return (
-    <div>
-      <PieChart income={income} expense={expense} ref={chartRef} />
-    </div>
+    <>
+      <HomeHeader />
+      {/* <Bar data={data} options={options} /> */}
+    </>
   );
 };
 

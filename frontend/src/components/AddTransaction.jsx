@@ -22,9 +22,9 @@ const AddTransaction = () => {
       <form>
         <div className="mb-4">
           <label className="ml-2 font-sans font-semibold">Text:</label>
-          <div className="p-1 border hover:border-2 border-black rounded-md m-2">
+          <div className="flex items-center border border-gray-300 rounded-md m-2 hover:border-black">
             <input
-              className="w-full outline-none"
+              className="w-full p-2 outline-none bg-transparent"
               type="text"
               value={text}
               onChange={(e) => setText(e.target.value)}
@@ -35,9 +35,9 @@ const AddTransaction = () => {
 
         <div className="mb-4">
           <label className="ml-2 font-sans font-semibold">Amount:</label>
-          <div className="p-1 border hover:border-2 border-black rounded-md m-2">
+          <div className="flex items-center border border-gray-300 rounded-md m-2 hover:border-black">
             <input
-              className="w-full outline-none"
+              className="w-full p-2 outline-none bg-transparent"
               type="number"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
