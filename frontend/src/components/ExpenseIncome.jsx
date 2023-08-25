@@ -6,12 +6,13 @@ const ExpenseIncome = () => {
   const amounts = context.item.map((transaction) => transaction.amount);
   const amount1 = amounts.filter((val) => val > 0);
   const amount2 = amounts.filter((val) => val < 0);
-
+  const total = amounts.reduce((start, end) => (start += end), 0).toFixed(2);
   const income = amount1.reduce((start, end) => (start += end), 0).toFixed(2);
-  const expense = amount2.reduce((start, end) => (start += end), 0).toFixed(2);
+  const exp = -amount2.reduce((start, end) => (start += end), 0).toFixed(2);
+  const expense = exp.toFixed(2);
   return (
     <div className=" my-8 border rounded-lg">
-      <PieChart income={income} expense={expense} />
+      <PieChart income={income} expense={expense} balance={total} />
       <div className="flex">
         <div className="flex-grow flex justify-center border-b   rounded-tl-lg sm:rounded-l-lg p-4 ">
           <div className="font-bold">

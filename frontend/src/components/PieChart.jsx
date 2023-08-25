@@ -3,13 +3,14 @@ import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const PieChart = ({ income, expense }) => {
+const PieChart = ({ income, expense, balance }) => {
   const data = {
-    labels: ["income", "expense"],
+    labels: ["income", "expense", "balance"],
     datasets: [
       {
-        data: [income, expense],
-        backgroundColor: ["green", "crimson"],
+        data: [income, expense, balance],
+        backgroundColor: ["#166534", "#dc2626", "#7e22ce"],
+        borderColor: "rgb(225,205,240)",
       },
     ],
   };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useContext } from "react";
 import { GlobalContext } from "../context/GlobalContext";
 import { FaTrash } from "react-icons/fa";

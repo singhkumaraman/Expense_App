@@ -1,29 +1,24 @@
-import React from "react";
-import { Bar } from "react-chartjs-2";
-// import { ChartJS, CategoryScale, LinearScale, Tooltip, Legend } from "chart.js";
+import React, { useContext, useEffect, useState } from "react";
 import HomeHeader from "../components/HomeHeader";
-
-// ChartJS.register(CategoryScale, LinearScale, Tooltip, Legend);
-
+import Graph from "../components/Graph";
+import { GlobalContext } from "../context/GlobalContext";
 const Analytics = () => {
-  const data = {
-    labels: ["mon", "tue"],
-    datasets: [
-      {
-        data: [5, 6],
-        backgroundColor: "green",
-        borderColor: "black",
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  const options = {};
-
+  const { getAnalytics, incomeMonthWise, expenseMonthWise } =
+    useContext(GlobalContext);
+  useEffect(() => {
+    getAnalytics();
+  }, []);
   return (
     <>
       <HomeHeader />
-      {/* <Bar data={data} options={options} /> */}
+      <div className="flex grow">
+        {
+          <Graph
+            expenseMonthWise={expenseMonthWise}
+            incomeMonthWise={incomeMonthWise}
+          />
+        }
+      </div>
     </>
   );
 };

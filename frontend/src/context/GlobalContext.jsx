@@ -11,6 +11,10 @@ const initialState = {
   logout: () => {},
   addTransaction: () => {},
   deleteTransaction: () => {},
+  incomeMonthWise: [],
+  expenseMonthWise: [],
+  setIncomeMothWise: () => {},
+  setExpenseMonthWise: () => {},
 };
 const reducer = (state, action) => {
   switch (action.type) {
@@ -44,6 +48,8 @@ export function GlobalProvider({ children }) {
   const [authToken, setAuthToken] = useState(null);
   const [userId, setUserId] = useState(null);
   const [user, setUser] = useState(null);
+  const [incomeMonthWise, setIncomeMothWise] = useState([]);
+  const [expenseMonthWise, setExpenseMonthWise] = useState([]);
   //Register User....
   const signup = async (name, password, email) => {
     if (name == "" || password === "" || email === "") {
@@ -141,7 +147,25 @@ export function GlobalProvider({ children }) {
       });
     }
   };
-
+  const getAnalytics = async () => {
+    const response = await fetch(
+      "http://localhost:5000/api/expense/analytics",
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
+    );
+    if (response.status === 200) {
+      const data = await response.json();
+      setIncomeMothWise(data.incomeMonthWise);
+      setExpenseMonthWise(data.expenseMonthWise);
+      return;
+    } else {
+      throw error("Invalid request");
+    }
+  };
   //  #Globally Available Values....
   const contextValue = {
     item: state.item,
@@ -157,6 +181,11 @@ export function GlobalProvider({ children }) {
     addTransaction,
     deleteTransaction,
     getTransaction,
+    getAnalytics,
+    incomeMonthWise: incomeMonthWise,
+    expenseMonthWise: expenseMonthWise,
+    setIncomeMothWise: setExpenseMonthWise,
+    setIncomeMothWise: setIncomeMothWise,
   };
   useEffect(() => {
     update();

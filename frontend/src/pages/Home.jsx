@@ -10,11 +10,18 @@ const Home = () => {
   useEffect(() => {
     context.getTransaction();
   }, []);
+  const desiredDate = "2023-07-13";
+
+  const filteredData = context.item.filter((obj) => {
+    const objDate = obj.createdAt.split("T")[0];
+
+    return objDate === desiredDate;
+  });
   return (
     <>
       <HomeHeader />
-      <div className="min-h-screen p-8 bg-gray-900">
-        <div className="max-w-lg mx-auto border p-20 rounded-lg shadow-lg bg-white">
+      <div className="min-h-screen p-4 m-20">
+        <div className="max-w-lg mx-auto border p-16 rounded-lg shadow-lg bg-white">
           <Balance />
           <ExpenseIncome />
           <List />

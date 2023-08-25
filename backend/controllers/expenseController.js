@@ -19,8 +19,6 @@ const deleteTransaction = asyncHandler(async (req, res) => {
   await Expense.findOneAndDelete({ _id: req.params.id });
   res.status(200).json("deleted");
 });
-//Middleware not working
-//will work on tha part later.
 const addTransaction = asyncHandler(async (req, res) => {
   const { text, amount, id } = req.body;
   const expense = await Expense.create({
@@ -30,9 +28,39 @@ const addTransaction = asyncHandler(async (req, res) => {
   });
   res.status(201).json("Transaction Added");
 });
-
+const getMe = asyncHandler(async (req, res) => {
+  const data = req.headers.authorization;
+  token = data.split(" ")[1];
+  const decoded = jwt.verify(token, "aman", { algorithms: ["HS256"] });
+  const user = await User.find({ _id: decoded.id });
+  if (!user) {
+    res.status(404).json("Not Authorised");
+  } else {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const startDate = new Date(currentYear, 0, 1);
+    const endDate = new Date(currentYear, 11, 31);
+    const expense = await Expense.find({
+      user: user,
+      createdAt: { $gte: startDate, $lte: endDate },
+    });
+    incomeMonthWise = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    expenseMonthWise = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    for (const item of expense) {
+      const date = new Date(item.createdAt);
+      const month = date.getMonth();
+      incomeMonthWise[month] += item.amount < 0 ? 0 : item.amount;
+      expenseMonthWise[month] += item.amount >= 0 ? 0 : -item.amount;
+    }
+    res.status(200).json({
+      incomeMonthWise: incomeMonthWise,
+      expenseMonthWise: expenseMonthWise,
+    });
+  }
+});
 module.exports = {
   getTransaction,
   deleteTransaction,
   addTransaction,
+  getMe,
 };

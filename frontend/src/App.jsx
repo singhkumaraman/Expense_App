@@ -14,30 +14,32 @@ const App = () => {
   return (
     <GlobalProvider>
       <BrowserRouter>
-        <Routes>
-          <Route element={<Login />} index />
-          <Route element={<SignUp />} exact path="/signup" />
-          <Route element={<Contact />} exact path="/contact" />
-          <Route
-            element={
-              <PrivateRoute>
-                <Analytics />
-              </PrivateRoute>
-            }
-            exact
-            path="/analytics"
-          />
-          <Route path="*" element={<Error />}></Route>
-          <Route
-            path="/home"
-            element={
-              <PrivateRoute>
-                <Home />
-              </PrivateRoute>
-            }
-          />
-        </Routes>
-        <Footer />
+        <div className="min-h-screen flex flex-col">
+          <Routes>
+            <Route element={<Login />} index />
+            <Route element={<SignUp />} exact path="/signup" />
+            <Route element={<Contact />} exact path="/contact" />
+            <Route
+              element={
+                <PrivateRoute>
+                  <Analytics />
+                </PrivateRoute>
+              }
+              exact
+              path="/analytics"
+            />
+            <Route path="*" element={<Error />}></Route>
+            <Route
+              path="/home"
+              element={
+                <PrivateRoute>
+                  <Home />
+                </PrivateRoute>
+              }
+            />
+          </Routes>
+          <Footer />
+        </div>
       </BrowserRouter>
     </GlobalProvider>
   );
