@@ -1,14 +1,47 @@
 import React from "react";
 import { useState } from "react";
-import { useContext } from "react";
-import { GlobalContext } from "../context/GlobalContext";
 import { BsFillPersonPlusFill } from "react-icons/bs";
 import Header from "../components/Header";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const context = useContext(GlobalContext);
+  const Success = () => toast("Signup Successfull");
+  const Failed = () => toast("Signup Failed");
+  const signup = async (name, password, email) => {
+    if (name == "" || password === "" || email === "") {
+      alert("Please Enter all the fields");
+      return;
+    }
+    try {
+      const response = await fetch("http://localhost:5000/api/user/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          password: password,
+        }),
+      });
+
+      const data = await response.json();
+      if (!data || data.error || response.status == 400) {
+        Failed();
+      } else {
+        Success();
+      }
+    } catch (err) {
+      Failed();
+    }
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    signup(username, password, email);
+  };
   return (
     <>
       <Header />
@@ -29,9 +62,7 @@ const SignUp = () => {
               <form
                 className="space-y-4 md:space-y-6"
                 action="#"
-                onSubmit={() => {
-                  context.signup(username, password, email);
-                }}
+                onSubmit={handleSubmit}
               >
                 <div>
                   <label
@@ -128,6 +159,7 @@ const SignUp = () => {
           </div>
         </div>
       </section>
+      <ToastContainer />
     </>
   );
 };

@@ -1,5 +1,5 @@
 import { createContext, useEffect, useReducer, useState } from "react";
-
+import { toast } from "react-toastify";
 const initialState = {
   user: null,
   user_id: null,
@@ -15,6 +15,8 @@ const initialState = {
   expenseMonthWise: [],
   setIncomeMothWise: () => {},
   setExpenseMonthWise: () => {},
+  reload: false,
+  setReload: () => {},
 };
 const reducer = (state, action) => {
   switch (action.type) {
@@ -50,35 +52,7 @@ export function GlobalProvider({ children }) {
   const [user, setUser] = useState(null);
   const [incomeMonthWise, setIncomeMothWise] = useState([]);
   const [expenseMonthWise, setExpenseMonthWise] = useState([]);
-  //Register User....
-  const signup = async (name, password, email) => {
-    if (name == "" || password === "" || email === "") {
-      alert("Please Enter all the fields");
-      return;
-    }
-    try {
-      const response = await fetch("http://localhost:5000/api/user/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: name,
-          email: email,
-          password: password,
-        }),
-      });
-
-      const data = await response.json();
-      if (!data || data.error || response.status == 400) {
-        alert("There was some error");
-      } else {
-        alert("User Created Successfully");
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const [relead, setReload] = useState(false);
   const logout = () => {
     localStorage.removeItem("authToken");
     localStorage.removeItem("user");
@@ -176,7 +150,6 @@ export function GlobalProvider({ children }) {
     setUserId: setUserId,
     setUser: setUser,
     logout: logout,
-    signup,
     logout,
     addTransaction,
     deleteTransaction,
@@ -186,6 +159,8 @@ export function GlobalProvider({ children }) {
     expenseMonthWise: expenseMonthWise,
     setIncomeMothWise: setExpenseMonthWise,
     setIncomeMothWise: setIncomeMothWise,
+    reload: false,
+    setReload,
   };
   useEffect(() => {
     update();

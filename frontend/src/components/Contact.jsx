@@ -9,15 +9,6 @@ const Contact = () => {
           <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-600">
             Contact Us
           </h2>
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3678.4743175166113!2d86.17781761084096!3d22.784882079254842!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f5e367f2f03d85%3A0x718c83e890908864!2sP%26M%20MALL!5e0!3m2!1sen!2sin!4v1688048874124!5m2!1sen!2sin"
-            width="1030"
-            height="450"
-            style={{ border: 0 }}
-            allowFullScreen=""
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          ></iframe>
           <p className="mb-8 lg:mb-16 font-light text-center text-gray-500 dark:text-gray-400 sm:text-xl">
             Got a technical issue? Want to send feedback about a beta feature?
             Need details about our Business plan? Let us know.

@@ -5,12 +5,15 @@ import { GlobalContext } from "../context/GlobalContext";
 import { useNavigate } from "react-router-dom";
 import { BsFillPersonCheckFill } from "react-icons/bs";
 import Header from "../components/Header";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Login = () => {
   const nav = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const context = useContext(GlobalContext);
+  const loginSuccess = () => toast("Login Successfull");
+  const loginFailed = () => toast("Login Failed");
   const login = async (email, password) => {
     const response = await fetch("http://localhost:5000/api/user/login", {
       method: "POST",
@@ -31,9 +34,10 @@ const Login = () => {
       context.setUserId(data.user._id);
       context.setAuthToken(token);
       context.setUser(data.user.name);
+      loginSuccess();
       nav("/home");
     } else {
-      alert("Invalid Credentials");
+      loginFailed();
     }
   };
   const handleSubmit = (e) => {
@@ -139,6 +143,7 @@ const Login = () => {
           </div>
         </div>
       </section>
+      <ToastContainer />
     </>
   );
 };

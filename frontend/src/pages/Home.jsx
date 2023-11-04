@@ -10,13 +10,6 @@ const Home = () => {
   useEffect(() => {
     context.getTransaction();
   }, []);
-  const desiredDate = "2023-07-13";
-
-  const filteredData = context.item.filter((obj) => {
-    const objDate = obj.createdAt.split("T")[0];
-
-    return objDate === desiredDate;
-  });
   return (
     <>
       <HomeHeader />
