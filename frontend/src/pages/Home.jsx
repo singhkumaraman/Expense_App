@@ -9,7 +9,7 @@ const Home = () => {
   const context = useContext(GlobalContext);
   useEffect(() => {
     context.getTransaction();
-  }, []);
+  });
   return (
     <>
       <HomeHeader />
