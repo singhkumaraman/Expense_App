@@ -1,14 +1,16 @@
 const mongoose = require("mongoose");
+
 const connectDB = async () => {
   try {
-    await mongoose.connect(
-      "mongodb+srv://aman:aman@cluster0.fuorplv.mongodb.net/Expense_Tracker",
-      {}
-    );
+    await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     console.log("Database Connected...");
   } catch (error) {
-    console.log(error);
+    console.error("Error connecting to the database:", error.message);
     process.exit(1);
   }
 };
+
 module.exports = connectDB;

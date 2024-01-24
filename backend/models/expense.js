@@ -22,4 +22,14 @@ const expenseSchema = mongoose.Schema(
   }
 );
 
+expenseSchema.pre("remove", async function (next) {
+  try {
+    await mongoose.model("User").deleteMany({ expense: this._id });
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = mongoose.model("Expense", expenseSchema);
