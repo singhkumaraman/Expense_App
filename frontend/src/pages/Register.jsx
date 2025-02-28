@@ -4,37 +4,43 @@ import { BsFillPersonPlusFill } from "react-icons/bs";
 import Header from "../components/Header";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { z } from "zod";
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const Success = () => toast("Signup Successfull");
   const Failed = () => toast("Signup Failed");
+  const signupSchema = z.object({
+    name: z.string().min(2, "Name must be at least 2 characters"),
+    email: z.string().email("Invalid email format"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+  });
+  
   const signup = async (name, password, email) => {
-    if (name == "" || password === "" || email === "") {
-      alert("Please Enter all the fields");
-      return;
-    }
     try {
+      const validation = signupSchema.safeParse({ name, email, password });
+  
+      if (!validation.success) {
+        toast("invalid inputs");
+        return ;
+      }
       const response = await fetch("http://localhost:5000/api/user/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          name: name,
-          email: email,
-          password: password,
-        }),
+        body: JSON.stringify({ name, email, password }),
       });
-
+  
       const data = await response.json();
-      if (!data || data.error || response.status == 400) {
+      if (!data || data.error || response.status === 400) {
         Failed();
       } else {
         Success();
       }
     } catch (err) {
+      console.error(err);
       Failed();
     }
   };

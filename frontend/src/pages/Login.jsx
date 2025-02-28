@@ -7,6 +7,7 @@ import { BsFillPersonCheckFill } from "react-icons/bs";
 import Header from "../components/Header";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { z } from "zod";
 const Login = () => {
   const nav = useNavigate();
   const [email, setEmail] = useState("");
@@ -14,32 +15,40 @@ const Login = () => {
   const context = useContext(GlobalContext);
   const loginSuccess = () => toast("Login Successfull");
   const loginFailed = () => toast("Login Failed");
-  const login = async (email, password) => {
+const loginSchema = z.object({
+  email: z.string().email("Invalid email format"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
+
+const login = async (email, password) => {
+  try {
+    const validation = loginSchema.safeParse({ email, password });
+
+    if (!validation.success) {
+      toast("invalid inputs");
+      return;
+    }
+
     const response = await fetch("http://localhost:5000/api/user/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
+      body: JSON.stringify({ email, password }),
     });
-    if (response.status === 200) {
-      const data = await response.json();
-      const token = data.token;
-      localStorage.setItem("authToken", JSON.stringify(token));
-      localStorage.setItem("user_id", JSON.stringify(data.user._id));
-      localStorage.setItem("user", JSON.stringify(data.user.name));
-      context.setUserId(data.user._id);
-      context.setAuthToken(token);
-      context.setUser(data.user.name);
-      loginSuccess();
-      nav("/home");
+
+    const data = await response.json();
+    if (!data || data.error || response.status === 400) {
+      Failed();
     } else {
-      loginFailed();
+      Success();
     }
-  };
+  } catch (err) {
+    console.error(err);
+    Failed();
+  }
+};
+
   const handleSubmit = (e) => {
     e.preventDefault();
     login(email, password);

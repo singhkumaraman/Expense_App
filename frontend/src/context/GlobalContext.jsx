@@ -1,5 +1,4 @@
 import { createContext, useEffect, useReducer, useState } from "react";
-import { toast } from "react-toastify";
 const initialState = {
   user: null,
   user_id: null,
@@ -62,7 +61,6 @@ export function GlobalProvider({ children }) {
     setUser(null);
   };
   const update = () => {
-    // if (authToken === null) logout();
     setAuthToken(JSON.parse(localStorage.getItem("authToken")));
     setUserId(JSON.parse(localStorage.getItem("user_id")));
     setUser(JSON.parse(localStorage.getItem("user")));
@@ -74,7 +72,7 @@ export function GlobalProvider({ children }) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${authToken}`,
+        Authorization: authToken,
       },
       body: JSON.stringify({ id: id, text: text, amount: amount }),
     });
@@ -94,7 +92,7 @@ export function GlobalProvider({ children }) {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
+          Authorization: authToken,
         },
       }
     );
@@ -107,10 +105,10 @@ export function GlobalProvider({ children }) {
   };
 
   const getTransaction = async () => {
-    const response = await fetch("http://localhost:5000/api/expense/", {
+    const response = await fetch("http://localhost:5000/api/expense", {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${authToken}`,
+        Authorization: authToken,
       },
     });
     if (response.status === 200) {
@@ -127,7 +125,7 @@ export function GlobalProvider({ children }) {
       {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${authToken}`,
+          Authorization: authToken,
         },
       }
     );

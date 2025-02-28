@@ -9,7 +9,5 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use("/api/user", require("./routes/userRoutes"));
 app.use("/api/expense", require("./routes/expenseRoutes"));
-console.log(process.env.PORT);
-app.listen(process.env.PORT, () => {
-  console.log("Server Running ");
-});
+const PORT = process.env.PORT || 5001;
+app.listen(PORT);

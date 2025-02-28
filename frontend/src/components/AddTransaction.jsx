@@ -24,7 +24,7 @@ const AddTransaction = () => {
       <form>
         {flag === "empty" ? (
           <>
-            <div class="flex gap-4 justify-center">
+            <div className="flex gap-4 justify-center">
               <button
                 className="ml-2 mt-2 py-1 px-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg"
                 onClick={() => {
