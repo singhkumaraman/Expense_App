@@ -17,11 +17,14 @@ const deleteTransaction = asyncHandler(async (req, res) => {
   res.status(200).json("deleted");
 });
 const addTransaction = asyncHandler(async (req, res) => {
-  const { text, amount, id } = req.body;
+  const { text, amount, id, description, category, date } = req.body;
   const expense = await Expense.create({
     user: id,
     text: text,
     amount: Number(amount),
+    description: description,
+    category: category,
+    date: date,
   });
   res.status(201).json("Transaction Added");
 });

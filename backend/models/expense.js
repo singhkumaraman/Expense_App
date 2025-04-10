@@ -7,13 +7,22 @@ const expenseSchema = mongoose.Schema(
       ref: "User",
       required: true,
     },
-    text: {
+    description: {
       type: String,
       trim: true,
       required: true,
     },
+    category: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     amount: {
       type: Number,
+      required: true,
+    },
+    date: {
+      type: Date,
       required: true,
     },
   },
@@ -24,8 +33,9 @@ const expenseSchema = mongoose.Schema(
 
 expenseSchema.pre("remove", async function (next) {
   try {
-    await mongoose.model("User").deleteMany({ expense: this._id });
-
+    await mongoose
+      .model("User")
+      .updateMany({ expenses: this._id }, { $pull: { expenses: this._id } });
     next();
   } catch (error) {
     next(error);

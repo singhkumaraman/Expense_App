@@ -32,8 +32,7 @@ const register = asynchandler(async (req, res) => {
     throw new Error("invalid request");
   }
   res.status(200).json({
-    name: user.name,
-    email: user.email,
+    message: "user successfully created",
   });
 });
 //LOGIN

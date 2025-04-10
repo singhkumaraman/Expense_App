@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import HomeHeader from "../components/HomeHeader";
 import Graph from "../components/Graph";
 import { GlobalContext } from "../context/GlobalContext";
 const Analytics = () => {
@@ -10,7 +9,6 @@ const Analytics = () => {
   }, []);
   return (
     <>
-      <HomeHeader />
       <div className="flex grow">
         {
           <Graph

@@ -1,74 +1,84 @@
 import React from "react";
-import Header from "./Header";
+
 const Contact = () => {
   return (
-    <>
-      <Header />
-      <section className="bg-gray-200">
-        <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
-          <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-600">
-            Contact Us
-          </h2>
-          <p className="mb-8 lg:mb-16 font-light text-center text-gray-500 dark:text-gray-400 sm:text-xl">
-            Got a technical issue? Want to send feedback about a beta feature?
-            Need details about our Business plan? Let us know.
-          </p>
-          <form
-            action="https://formspree.io/f/xaygwpvg"
-            className="space-y-8"
-            method="POST"
+    <section className="bg-gradient-to-br from-white/80 to-gray-100 py-16 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto text-center mb-12">
+        <h2 className="text-5xl font-extrabold text-gray-800 tracking-tight">
+          Contact Us
+        </h2>
+        <p className="mt-4 text-lg text-gray-600">
+          We’d love to hear from you. Whether you have a question, feedback, or
+          need support.
+        </p>
+      </div>
+
+      <form
+        action="https://formspree.io/f/xaygwpvg"
+        method="POST"
+        className="max-w-3xl mx-auto bg-white p-10 rounded-3xl shadow-xl border border-gray-200 space-y-6 transition-all duration-300"
+      >
+        <div>
+          <label
+            htmlFor="email"
+            className="block text-sm font-semibold text-gray-700 mb-2"
           >
-            <div>
-              <label for="email" className="block mb-2 text-sm font-medium ">
-                Your email
-              </label>
-              <input
-                name="username"
-                type="email"
-                id="email"
-                className="shadow-sm bg-gray-50 border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
-                placeholder="name@gmail.com"
-                required
-              />
-            </div>
-            <div>
-              <label for="subject" className="block mb-2 text-sm font-medium">
-                Subject
-              </label>
-              <input
-                name="subject"
-                type="text"
-                id="subject"
-                className="block p-3 w-full text-sm  bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500 "
-                placeholder="Let us know how we can help you"
-                required
-              />
-            </div>
-            <div className="sm:col-span-2">
-              <label
-                for="message"
-                className="block mb-2 text-sm font-medium  dark:text-gray-400"
-              >
-                Your message
-              </label>
-              <textarea
-                name="message"
-                id="message"
-                rows="6"
-                className="block p-2.5 w-full text-sm  bg-gray-50 rounded-lg shadow-sm border border-gray-300 focus:ring-primary-500 focus:border-primary-500 "
-                placeholder="Leave a comment..."
-              ></textarea>
-            </div>
-            <button
-              type="submit"
-              className="py-3 px-5 text-sm font-medium text-center text-white rounded-lg bg-blue-700 sm:w-fit hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-blue-600 dark:hover:bg-primary-700 dark:focus:bg-blue-800"
-            >
-              Send message
-            </button>
-          </form>
+            Email Address
+          </label>
+          <input
+            type="email"
+            name="username"
+            id="email"
+            required
+            placeholder="you@example.com"
+            className="w-full px-4 py-3 text-sm rounded-xl bg-gray-100 text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"
+          />
         </div>
-      </section>
-    </>
+
+        <div>
+          <label
+            htmlFor="subject"
+            className="block text-sm font-semibold text-gray-700 mb-2"
+          >
+            Subject
+          </label>
+          <input
+            type="text"
+            name="subject"
+            id="subject"
+            required
+            placeholder="How can we assist you?"
+            className="w-full px-4 py-3 text-sm rounded-xl bg-gray-100 text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="message"
+            className="block text-sm font-semibold text-gray-700 mb-2"
+          >
+            Message
+          </label>
+          <textarea
+            name="message"
+            id="message"
+            rows="6"
+            required
+            placeholder="Write your message here..."
+            className="w-full px-4 py-3 text-sm rounded-xl bg-gray-100 text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"
+          ></textarea>
+        </div>
+
+        <div className="text-center">
+          <button
+            type="submit"
+            className="inline-block w-full sm:w-auto px-6 py-3 bg-indigo-600 text-white text-sm font-semibold rounded-xl shadow-md hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300 transition"
+          >
+            Send Message
+          </button>
+        </div>
+      </form>
+    </section>
   );
 };
 

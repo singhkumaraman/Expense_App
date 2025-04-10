@@ -1,137 +1,109 @@
-import React from "react";
-import { useState } from "react";
-import { useContext } from "react";
+import React, { useState, useContext } from "react";
 import { GlobalContext } from "../context/GlobalContext";
 import { useNavigate } from "react-router-dom";
 import { BsFillPersonCheckFill } from "react-icons/bs";
 import Header from "../components/Header";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { z } from "zod";
+
 const Login = () => {
   const nav = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const context = useContext(GlobalContext);
-  const loginSuccess = () => toast("Login Successfull");
-  const loginFailed = () => toast("Login Failed");
-const loginSchema = z.object({
-  email: z.string().email("Invalid email format"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-});
 
-const login = async (email, password) => {
-  try {
-    const validation = loginSchema.safeParse({ email, password });
+  const loginSuccess = () => toast.success("🚀 Login Successful!");
+  const loginFailed = () => toast.error("❌ Invalid Credentials!");
 
-    if (!validation.success) {
-      toast("invalid inputs");
-      return;
-    }
-
+  const login = async (email, password) => {
     const response = await fetch("http://localhost:5000/api/user/login", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
 
-    const data = await response.json();
-    if (!data || data.error || response.status === 400) {
-      Failed();
+    if (response.status === 200) {
+      const data = await response.json();
+      localStorage.setItem("authToken", JSON.stringify(data.token));
+      localStorage.setItem("user_id", JSON.stringify(data.user._id));
+      localStorage.setItem("user", JSON.stringify(data.user.name));
+      context.setUserId(data.user._id);
+      context.setAuthToken(data.token);
+      context.setUser(data.user.name);
+      loginSuccess();
+      nav("/");
     } else {
-      Success();
+      loginFailed();
     }
-  } catch (err) {
-    console.error(err);
-    Failed();
-  }
-};
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     login(email, password);
   };
+
   return (
     <>
-      <Header />
-      <section className="bg-gray-50 dark:bg-gray-900">
-        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-          <a
-            href="#"
-            className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
-          >
-            <BsFillPersonCheckFill className="m-2" />
-            Sign in
-          </a>
-          <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-            <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                Sign in to your account
-              </h1>
-              <form
-                className="space-y-4 md:space-y-6"
-                action="#"
-                onSubmit={handleSubmit}
-              >
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Your email
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="name@company.com"
-                    required
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="password"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                >
-                  Sign in
-                </button>
-                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                  Don’t have an account yet?{" "}
-                  <a
-                    href="/signup"
-                    className="font-medium  hover:underline text-primary-500"
-                  >
-                    Sign up
-                  </a>
-                </p>
-              </form>
-            </div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-purple-300 via-pink-200 to-yellow-100 px-4 py-12">
+        <div className="w-full max-w-md bg-white/30 backdrop-blur-md border border-white/20 shadow-2xl rounded-3xl p-8 transition-all duration-300 hover:scale-[1.01]">
+          <div className="flex items-center justify-center text-4xl font-extrabold text-indigo-700 mb-4 gap-2">
+            <BsFillPersonCheckFill className="text-indigo-600 animate-bounce" />
+            <span className="bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
+              Welcome Back
+            </span>
           </div>
+          <p className="text-center text-gray-700 text-sm mb-6">
+            Log in to access your dashboard ✨
+          </p>
+
+          <form className="space-y-5" onSubmit={handleSubmit}>
+            <div>
+              <label className="block text-sm font-medium text-gray-800 mb-1">
+                Email
+              </label>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-3 text-sm bg-white/70 border border-gray-300 rounded-xl shadow-inner focus:ring-2 focus:ring-purple-400 focus:outline-none transition duration-300"
+                placeholder="your@email.com"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-800 mb-1">
+                Password
+              </label>
+              <input
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-3 text-sm bg-white/70 border border-gray-300 rounded-xl shadow-inner focus:ring-2 focus:ring-purple-400 focus:outline-none transition duration-300"
+                placeholder="••••••••"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="w-full py-3 text-sm font-semibold text-white bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl shadow-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
+            >
+              🚀 Log In
+            </button>
+
+            <p className="text-sm text-center text-gray-700 mt-4">
+              Don’t have an account?{" "}
+              <a
+                href="/signup"
+                className="font-semibold text-indigo-600 hover:underline"
+              >
+                Create one
+              </a>
+            </p>
+          </form>
         </div>
-      </section>
-      <ToastContainer />
+      </div>
+      <ToastContainer position="top-right" autoClose={2500} />
     </>
   );
 };
