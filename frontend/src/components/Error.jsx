@@ -1,26 +1,43 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Header from "./Header";
-const Error = () => {
+
+const Error = ({
+  code = "500",
+  title = "Internal Server Error",
+  message = "Oops! Something went wrong. Please try again later.",
+  image = "/assets/404.png",
+}) => {
   return (
-    <>
-      <Header />
-      <section className="bg-white dark:bg-gray-900">
-        <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
-          <div className="mx-auto max-w-screen-sm text-center">
-            <h1 className="mb-4 text-7xl tracking-tight font-extrabold lg:text-9xl text-primary-600 dark:text-blue-500">
-              500
-            </h1>
-            <p className="mb-4 text-3xl tracking-tight font-bold text-gray-900 md:text-4xl dark:text-white">
-              Internal Server Error.
-            </p>
-            <p className="mb-4 text-lg font-light text-gray-500 dark:text-gray-400">
-              We are really sorry the page you are looking does not exists.{" "}
-            </p>
+    <section className="min-h-screen flex items-center justify-center bg-gray-100 px-4 py-12">
+      <div className="w-full max-w-lg bg-white p-8 rounded-3xl shadow-xl border border-gray-200 text-center">
+        {image && (
+          <div className="flex justify-center items-center mb-6">
+            <img
+              src={image}
+              alt="Error illustration"
+              className="w-40 h-40 object-contain"
+            />
           </div>
-        </div>
-      </section>
-    </>
+        )}
+
+        <h1 className="text-6xl lg:text-8xl font-extrabold bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent mb-4">
+          {code}
+        </h1>
+
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
+          {title}
+        </h2>
+
+        <p className="text-gray-600 text-md mb-6 leading-relaxed">{message}</p>
+
+        <Link
+          to="/login"
+          className="inline-block px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold shadow-md hover:from-indigo-600 hover:to-purple-600 transition duration-300"
+        >
+          Go Back Home
+        </Link>
+      </div>
+    </section>
   );
 };
 

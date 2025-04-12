@@ -17,7 +17,8 @@ const deleteTransaction = asyncHandler(async (req, res) => {
   res.status(200).json("deleted");
 });
 const addTransaction = asyncHandler(async (req, res) => {
-  const { text, amount, id, description, category, date } = req.body;
+  const { text, amount, id, description, category, date, transactionType } =
+    req.body;
   const expense = await Expense.create({
     user: id,
     text: text,
@@ -25,6 +26,7 @@ const addTransaction = asyncHandler(async (req, res) => {
     description: description,
     category: category,
     date: date,
+    transactionType: transactionType,
   });
   res.status(201).json("Transaction Added");
 });
@@ -33,7 +35,7 @@ const getMe = asyncHandler(async (req, res) => {
   const currentYear = currentDate.getFullYear();
   const startDate = new Date(currentYear, 0, 1);
   const endDate = new Date(currentYear, 11, 31);
-  const user = await User.find({ _id: req.body.id });
+  const user = await User.find({ _id: req.user.id });
   const expense = await Expense.find({
     user: user,
     createdAt: { $gte: startDate, $lte: endDate },
@@ -43,8 +45,8 @@ const getMe = asyncHandler(async (req, res) => {
   for (const item of expense) {
     const date = new Date(item.createdAt);
     const month = date.getMonth();
-    incomeMonthWise[month] += item.amount < 0 ? 0 : item.amount;
-    expenseMonthWise[month] += item.amount >= 0 ? 0 : -item.amount;
+    incomeMonthWise[month] += item.transactionType === "inc" ? item.amount : 0;
+    expenseMonthWise[month] += item.transactionType === "exp" ? item.amount : 0;
   }
   res.status(200).json({
     incomeMonthWise: incomeMonthWise,

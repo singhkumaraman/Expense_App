@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { SiAnalogue } from "react-icons/si";
+import { GlobalContext } from "../context/GlobalContext";
 
 const Header = () => {
+  const { token, logout } = useContext(GlobalContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const isAuthenticated = !!token;
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -49,7 +52,7 @@ const Header = () => {
 
         {/* Desktop Nav */}
         <nav className="hidden lg:flex items-center space-x-6">
-          <NavLinks />
+          <NavLinks isAuthenticated={isAuthenticated} logout={logout} />
         </nav>
       </div>
 
@@ -57,7 +60,11 @@ const Header = () => {
       {isMenuOpen && (
         <div className="lg:hidden px-4 pb-4 transition-all duration-300 ease-in-out">
           <nav className="flex flex-col space-y-2">
-            <NavLinks mobile />
+            <NavLinks
+              mobile
+              isAuthenticated={isAuthenticated}
+              logout={logout}
+            />
           </nav>
         </div>
       )}
@@ -66,10 +73,7 @@ const Header = () => {
 };
 
 // NavLinks Component for reuse
-const NavLinks = ({ mobile = false }) => {
-  const isAuthenticated = false;
-  const logout = () => {};
-
+const NavLinks = ({ mobile = false, isAuthenticated, logout }) => {
   const linkClass =
     "text-gray-800 hover:text-indigo-600 font-medium transition-all duration-300";
   const buttonBase =

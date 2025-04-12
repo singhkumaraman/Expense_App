@@ -22,20 +22,14 @@ const Footer = () => {
         <ul className="flex flex-wrap justify-center items-center gap-6 mb-6 text-gray-700 dark:text-gray-300 text-sm font-medium">
           <li>
             <a
-              href="#"
+              href="https://en.wikipedia.org/wiki/Expense_management"
+              target="_blank"
               className="hover:text-indigo-600 transition-colors duration-300"
             >
               About
             </a>
           </li>
-          <li>
-            <a
-              href="#"
-              className="hover:text-indigo-600 transition-colors duration-300"
-            >
-              Premium
-            </a>
-          </li>
+
           <li>
             <a
               href="https://github.com/singhkumaraman/"
@@ -48,7 +42,7 @@ const Footer = () => {
           </li>
           <li>
             <a
-              href="#"
+              href="/contact"
               className="hover:text-indigo-600 transition-colors duration-300"
             >
               Contact

@@ -46,12 +46,12 @@ const Graph = ({ incomeMonthWise, expenseMonthWise }) => {
   const options = {};
 
   return (
-    <div className="mx-auto w-1/2 my-5">
+    <div className="mx-auto w-1/2 mt-5">
       <div
         className="chart-container"
         style={{ position: "relative", height: "400px" }}
       >
-        <Bar data={chartData} options={options} className="p-10" />
+        <Bar data={chartData} options={options} className="p-2" />
       </div>
     </div>
   );

@@ -10,5 +10,5 @@ const {
 router.post("/", authMiddleware, addTransaction);
 router.delete("/:id", authMiddleware, deleteTransaction);
 router.get("/", authMiddleware, getTransaction);
-router.get("/analytics", getMe);
+router.get("/analytics", authMiddleware, getMe);
 module.exports = router;

@@ -2,6 +2,11 @@ const mongoose = require("mongoose");
 
 const expenseSchema = mongoose.Schema(
   {
+    transactionType: {
+      type: String,
+      required: true,
+      enum: ["inc", "exp"],
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

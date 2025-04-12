@@ -9,7 +9,7 @@ const ExpenseForm = () => {
     amount: 0,
     date: "",
   });
-  const { addTransaction, user_id } = useContext(GlobalContext);
+  const { addTransaction, user_id, getTransaction } = useContext(GlobalContext);
   const handleChange = (e) => {
     setExpense({ ...expense, [e.target.name]: e.target.value });
   };
@@ -19,12 +19,14 @@ const ExpenseForm = () => {
     if (!expense.description || !expense.amount || !expense.date) return;
     addTransaction(
       user_id,
-      -expense.amount,
+      expense.amount,
       expense.description,
       expense.date,
-      expense.category
+      expense.category,
+      "exp"
     );
     setExpense({ description: "", category: "", amount: "", date: "" });
+    getTransaction();
     nav("/");
   };
 

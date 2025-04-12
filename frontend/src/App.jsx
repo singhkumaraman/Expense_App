@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { GlobalProvider } from "./context/GlobalContext.jsx";
 import Footer from "./components/Footer.jsx";
 import Header from "./components/Header.jsx";
-import ExpenseList from "./components/ExpenseList.jsx";
 import ExpenseForm from "./components/ExpenseForm.jsx";
 const Home = React.lazy(() => import("./pages/Home.jsx"));
 const Login = React.lazy(() => import("./pages/Login.jsx"));
@@ -23,24 +22,30 @@ const App = () => {
             fallback={<div className="text-center mt-10">Loading...</div>}
           >
             <Routes>
-              <Route index element={<ExpenseList />} />
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/expenseform" element={<ExpenseForm />} />
-              <Route
-                path="/analytics"
-                element={
-                  <PrivateRoute>
-                    <Analytics />
-                  </PrivateRoute>
-                }
-              />
               <Route
                 path="/"
                 element={
                   <PrivateRoute>
                     <Home />
+                  </PrivateRoute>
+                }
+              />
+              <Route path="/signup" element={<SignUp />} />
+              <Route index path="/login" element={<Login />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route
+                path="/expenseform"
+                element={
+                  <PrivateRoute>
+                    <ExpenseForm />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/analytics"
+                element={
+                  <PrivateRoute>
+                    <Analytics />
                   </PrivateRoute>
                 }
               />

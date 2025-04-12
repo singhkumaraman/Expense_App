@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useCallback,
-  useEffect,
-  useMemo,
-  useReducer,
-  useState,
-} from "react";
+import { createContext, useEffect, useReducer, useState } from "react";
 
 const initialState = {
   user: null,
@@ -61,22 +54,37 @@ export function GlobalProvider({ children }) {
   const [expenseMonthWise, setExpenseMonthWise] = useState([]);
   const [reload, setReload] = useState(false);
 
-  const logout = useCallback(() => {
+  const logout = () => {
     localStorage.removeItem("authToken");
     localStorage.removeItem("user");
     localStorage.removeItem("user_id");
     setAuthToken(null);
     setUserId(null);
     setUser(null);
-  }, []);
+  };
 
-  const update = useCallback(() => {
+  const update = () => {
     setAuthToken(JSON.parse(localStorage.getItem("authToken")));
     setUserId(JSON.parse(localStorage.getItem("user_id")));
     setUser(JSON.parse(localStorage.getItem("user")));
-  }, []);
 
-  const addTransaction = async (id, amount, description, date, category) => {
+    const savedTransactions = JSON.parse(localStorage.getItem("transactions"));
+    if (savedTransactions) {
+      dispatch({
+        type: "GET_TRANSACTION",
+        payload: savedTransactions,
+      });
+    }
+  };
+
+  const addTransaction = async (
+    id,
+    amount,
+    description,
+    date,
+    category,
+    transactionType
+  ) => {
     const response = await fetch("http://localhost:5000/api/expense", {
       method: "POST",
       headers: {
@@ -89,6 +97,7 @@ export function GlobalProvider({ children }) {
         description: description,
         category: category,
         date: date,
+        transactionType: transactionType,
       }),
     });
 
@@ -100,24 +109,22 @@ export function GlobalProvider({ children }) {
       });
     }
   };
-  const deleteTransaction = useCallback(
-    async (id) => {
-      const response = await fetch(`http://localhost:5000/api/expense/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-        },
+  const deleteTransaction = async (id) => {
+    const response = await fetch(`http://localhost:5000/api/expense/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
+    if (response.status === 200) {
+      dispatch({
+        type: "DELETE_TRANSACTION",
+        payload: id,
       });
-      if (response.status === 200) {
-        dispatch({
-          type: "DELETE_TRANSACTION",
-          payload: id,
-        });
-      }
-    },
-    [authToken]
-  );
+      getTransaction();
+    }
+  };
 
   const getTransaction = async () => {
     if (!authToken) return;
@@ -129,7 +136,6 @@ export function GlobalProvider({ children }) {
     });
     if (response.status === 200) {
       const data = await response.json();
-      consloe.log(data);
       dispatch({
         type: "GET_TRANSACTION",
         payload: data,
@@ -137,7 +143,7 @@ export function GlobalProvider({ children }) {
     }
   };
 
-  const getAnalytics = useCallback(async () => {
+  const getAnalytics = async () => {
     const response = await fetch(
       "http://localhost:5000/api/expense/analytics",
       {
@@ -154,49 +160,38 @@ export function GlobalProvider({ children }) {
     } else {
       throw new Error("Invalid request");
     }
-  }, [authToken]);
+  };
 
-  const contextValue = useMemo(
-    () => ({
-      item: state.item,
-      user: user,
-      user_id: userId,
-      token: authToken,
-      setAuthToken,
-      setUserId,
-      setUser,
-      logout,
-      addTransaction,
-      deleteTransaction,
-      getTransaction,
-      getAnalytics,
-      incomeMonthWise,
-      expenseMonthWise,
-      setIncomeMothWise,
-      setExpenseMonthWise,
-      reload,
-      setReload,
-    }),
-    [
-      state.item,
-      user,
-      userId,
-      authToken,
-      addTransaction,
-      deleteTransaction,
-      getTransaction,
-      getAnalytics,
-      incomeMonthWise,
-      expenseMonthWise,
-      reload,
-      logout,
-    ]
-  );
+  const contextValue = {
+    item: state.item,
+    user: user,
+    user_id: userId,
+    token: authToken,
+    setAuthToken,
+    setUserId,
+    setUser,
+    logout,
+    addTransaction,
+    deleteTransaction,
+    getTransaction,
+    getAnalytics,
+    incomeMonthWise,
+    expenseMonthWise,
+    setIncomeMothWise,
+    setExpenseMonthWise,
+    reload,
+    setReload,
+  };
 
   useEffect(() => {
     update();
   }, [update]);
-
+  useEffect(() => {
+    if (authToken) {
+      getTransaction();
+      getAnalytics();
+    }
+  }, [authToken]);
   return (
     <GlobalContext.Provider value={contextValue}>
       {children}
